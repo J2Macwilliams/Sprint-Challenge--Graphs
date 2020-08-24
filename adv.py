@@ -47,31 +47,55 @@ player = Player(world.starting_room)
 # use a DFT like traversal approach with recursion
 # idea is to identify rooms not visited traverse thu them 
 # back track out of rooms already visited
+
 # Build Graph
+traversal_graph = {}
+for rm, info in room_graph.items():
+    traversal_graph[rm] = info.pop()
+
 # Traveling dictionary for opposites moves
+opposites = {
+    'n' : 's',
+    's' : 'n',
+    'e' : 'w',
+    'w' : 'e'
+}
+
 # create a recursive function
-    # pass visited set thru call stack
-        # establish route for collecting moves
-        # set current room to a variable
-        # create loop with directions from create traversal graph
+# pass visited set thru call stack
+def find_directions(visited=set()):
+    # establish route for collecting moves
+    route = []
+    
+    # set current room to a variable
+    cur_rm = player.current_room.id
+    # create loop with directions from create traversal graph
+    for move_dir in traversal_graph[cur_rm].keys():
         # create variable for accessing nxt_room
+        nxt_room = traversal_graph[cur_rm][move_dir]
         # check nxt_room if visited
-        # add room to visited set
-        # move player thru move_dir
-        # add move to route
-        # use recursion to increment route
-        # thru unvisited rooms
-        # backtrack out of rooms visited
-        # add backtrack moves to route
-
-# return route
-
-
+        if nxt_room not in visited:
+            # add room to visited set
+            visited.add(nxt_room)
+            # move player thru move_dir
+            player.travel(move_dir)
+            # add move to route
+            route.append(move_dir)
+            # use recursion to increment route
+            # thru unvisited rooms
+            route += find_directions(visited)
+            # backtrack out of rooms visited
+            player.travel(opposites[move_dir])
+            # add backtrack moves to route
+            route.append(opposites[move_dir])
+       
+    # return route
+    return route
 
 # Fill this out with directions to walk
 # traversal_path = ['n', 'n']
 # set traversal path to function response
-traversal_path = []
+traversal_path = find_directions()
 
 
 
