@@ -1,3 +1,19 @@
+"""
+ Understand:
+    - Objective is to end up with a list of moves -> [n,s,e,n,s,w]
+    - Use the power of traversal
+    - Hints are Misleading
+    - Tenets of Traversing
+    ##Translate
+    ##Build
+    ##Traverse
+
+    -Acquire graph from file and put it together
+    -identify visited rooms with a set
+    -identify moves from the traversal_graph[room].keys()
+    -follow the unvisited rooms down the rabbit hole, then backtrack
+
+"""
 from room import Room
 from player import Player
 from world import World
@@ -25,8 +41,36 @@ world.print_rooms()
 
 player = Player(world.starting_room)
 
+# Translate
+# PLAN
+# Abstract out info from room_graph to traversal graph
+# use a DFT like traversal approach with recursion
+# idea is to identify rooms not visited traverse thu them 
+# back track out of rooms already visited
+# Build Graph
+# Traveling dictionary for opposites moves
+# create a recursive function
+    # pass visited set thru call stack
+        # establish route for collecting moves
+        # set current room to a variable
+        # create loop with directions from create traversal graph
+        # create variable for accessing nxt_room
+        # check nxt_room if visited
+        # add room to visited set
+        # move player thru move_dir
+        # add move to route
+        # use recursion to increment route
+        # thru unvisited rooms
+        # backtrack out of rooms visited
+        # add backtrack moves to route
+
+# return route
+
+
+
 # Fill this out with directions to walk
 # traversal_path = ['n', 'n']
+# set traversal path to function response
 traversal_path = []
 
 
