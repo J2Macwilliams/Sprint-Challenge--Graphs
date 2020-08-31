@@ -1,3 +1,19 @@
+"""
+ Understand:
+    - Objective is to end up with a list of moves -> [n,s,e,n,s,w]
+    - Use the power of traversal
+    - Hints are Misleading
+    - Tenets of Traversing
+    ##Translate
+    ##Build
+    ##Traverse
+
+    -Acquire graph from file and put it together
+    -identify visited rooms with a set
+    -identify moves from the traversal_graph[room].keys()
+    -follow the unvisited rooms down the rabbit hole, then backtrack
+
+"""
 from room import Room
 from player import Player
 from world import World
@@ -25,9 +41,61 @@ world.print_rooms()
 
 player = Player(world.starting_room)
 
+# Translate
+# PLAN
+# Abstract out info from room_graph to traversal graph
+# use a DFT like traversal approach with recursion
+# idea is to identify rooms not visited traverse thu them 
+# back track out of rooms already visited
+
+# Build Graph
+traversal_graph = {}
+for rm, info in room_graph.items():
+    traversal_graph[rm] = info.pop()
+
+# Traveling dictionary for opposites moves
+opposites = {
+    'n' : 's',
+    's' : 'n',
+    'e' : 'w',
+    'w' : 'e'
+}
+
+# create a recursive function
+# pass visited set thru call stack
+def find_directions(visited=set()):
+    # establish route for collecting moves
+    route = []
+    
+    # set current room to a variable
+    cur_rm = player.current_room.id
+    # create loop with directions from create traversal graph
+    for move_dir in traversal_graph[cur_rm].keys():
+        # create variable for accessing nxt_room
+        nxt_room = traversal_graph[cur_rm][move_dir]
+        # check nxt_room if visited
+        if nxt_room not in visited:
+            # add room to visited set
+            visited.add(nxt_room)
+            # move player thru move_dir
+            player.travel(move_dir)
+            # add move to route
+            route.append(move_dir)
+            # use recursion to increment route
+            # thru unvisited rooms
+            route += find_directions(visited)
+            # backtrack out of rooms visited
+            player.travel(opposites[move_dir])
+            # add backtrack moves to route
+            route.append(opposites[move_dir])
+       
+    # return route
+    return route
+
 # Fill this out with directions to walk
 # traversal_path = ['n', 'n']
-traversal_path = []
+# set traversal path to function response
+traversal_path = find_directions()
 
 
 
